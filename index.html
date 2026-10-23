@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BillSafe: GST invoice sanity checker</title><meta name="description" content="Catch GST invoice mistakes before your client does. Runs 100% in your browser.">
+<link rel="stylesheet" href="styles.css"></head><body>
+<header class="hero"><div class="wrap"><div class="logo">✓ BillSafe</div><h1>Catch GST invoice mistakes <em>before</em> your client does.</h1>
+<p>For Indian freelancers. It checks GSTIN checksums, CGST/SGST vs IGST, Rule 46 invoice numbers, SAC codes, LUT exports and totals, and explains every fix. Nothing leaves your browser.</p>
+<div class="samples"><button data-sample="broken" class="btn ghost">Load a broken invoice</button><button data-sample="clean" class="btn ghost">Load a clean invoice</button><button id="reset" class="btn link">Clear</button></div></div></header>
+<main class="wrap grid">
+<form id="f" autocomplete="off">
+ <section class="card"><h2>You (supplier)</h2>
+  <label>Your GSTIN<input name="supplierGstin" maxlength="15" placeholder="27AAPFU0939F1ZV"></label>
+  <label>Your state<select name="supplierState" class="states"></select></label>
+  <label class="chk"><input type="checkbox" name="composition"> I'm under the composition scheme</label></section>
+ <section class="card"><h2>Client</h2>
+  <label class="chk"><input type="checkbox" name="b2b" checked> Client is a registered business (B2B)</label>
+  <label>Client GSTIN<input name="recipientGstin" maxlength="15" placeholder="optional for B2C / export"></label>
+  <label>Place of supply<select name="recipientState" class="states"></select></label>
+  <label class="chk"><input type="checkbox" name="lutNote"> Invoice carries an LUT declaration (exports)</label></section>
+ <section class="card"><h2>Invoice</h2><div class="row">
+  <label>Invoice no.<input name="invoiceNo" placeholder="INV/26-27/001"></label>
+  <label>Date<input type="date" name="date"></label></div></section>
+ <section class="card"><h2>Line items</h2>
+  <table class="items"><thead><tr><th>Description</th><th>SAC/HSN</th><th>Qty</th><th>Rate ₹</th><th>GST %</th><th></th></tr></thead><tbody id="items"></tbody></table>
+  <button type="button" id="add" class="btn ghost sm">+ Add line</button></section>
+ <section class="card"><h2>Tax you charged</h2><div class="row four">
+  <label>CGST ₹<input name="cgst" inputmode="decimal"></label><label>SGST ₹<input name="sgst" inputmode="decimal"></label>
+  <label>IGST ₹<input name="igst" inputmode="decimal"></label><label>Grand total ₹<input name="total" inputmode="decimal"></label></div></section>
+</form>
+<aside id="report" class="card report" aria-live="polite">
+ <div class="scorebox"><div id="ring" class="ring"><span id="score">–</span></div><div><div id="verdict" class="verdict">Fill in an invoice or load a sample</div><div id="counts" class="muted"></div></div></div>
+ <div class="actions"><button id="fix" class="btn" disabled>Auto-fix what's safe</button><button id="print" class="btn ghost" disabled>Print report</button></div>
+ <ol id="checks" class="checks"></ol></aside>
+</main>
+<footer class="wrap muted">Runs fully in your browser: no uploads, no tracking. This is a sanity check, not tax advice. Confirm edge cases with your CA. · <a href="https://github.com/Sourendas/billsafe">Source (MIT)</a></footer>
+<script type="module" src="src/app.js"></script></body></html>
